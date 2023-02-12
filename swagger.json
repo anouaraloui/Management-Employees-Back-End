@@ -1,0 +1,922 @@
+{
+        "swagger": "2.0",
+        "info": {
+          "title": "Days Off App",
+          "description": "Thanks to this application , the leave management system empowers your staff on . question such as How many days of paid vacation do i have left?  Your staff can check balances ,manage and track their time off.Managers can run reports,analyze absence trends,and find solutions to staffing issues in real time."
+          
+        },
+        
+        "servers": [
+          {
+            "url": "http://localhost:4000/"
+          }
+        ],
+        
+        "tags": [
+          {
+            "name": "users",
+            "description": "Operations about user"
+          },
+          {
+            "name": "daysoffs",
+            "description": "Everything about day off"
+          } 
+        ],
+        
+        "paths": {
+          "/users/createNewUser": {
+            "post": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "users"
+              ],
+             
+              "parameters": [
+                {
+                  "name" :"user",
+                  "in": "body",
+                  "schema": {
+                    "type":"object",
+                   "properties":{
+            
+                    "firstName": {
+                      "type": "string",
+                      "example": "exemple"
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "example": "exemple"
+                    },
+                    
+                    "email": {
+                      "type": "string",
+                      "example": "exemple@email.com"
+                    },
+                   
+                    "phone": {
+                      "type": "string",
+                      "example": "2345"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "Software Engineer"
+                     
+                    },
+                    "building": {
+                      "type": "string",
+                      "example": "Front-End"
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "example": "12345"
+                    }
+            
+                   }
+                  }
+                }
+              ],
+            
+              "responses": {
+                "201": {
+                  "description": "User created",
+                  "content": {
+                    "$ref": "#/definitions/User"
+                  }
+                },
+                "400": {
+                  "description": "error"
+                },
+                "500": {
+                  "description": "error"
+                }
+              }
+             
+            }
+          },
+          "/users/login": {
+            "post": {
+              "tags": [
+                "users"
+              ],
+              "parameters": [
+                {
+                  "name" :"body",
+                  "in": "body",
+                  "schema": {
+                   "type":"object",
+                   "properties":{
+                    "email": {
+                      "type": "string"
+                    },
+                    "password" : {
+                      "type": "string"
+                    }
+                   }
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Successful operation"
+              
+                },
+                "404": {
+                  "description": "User not found !"
+                },
+                "401": {
+                  "description": "Incorrect password !"
+                },
+                "400": {
+                  "description": "error"
+                },
+                "500": {
+                  "description": "error"
+                }
+              }
+            }
+          },
+          "/users/forgetPassword": {
+            "post": {
+              "tags": [
+                "users"
+              ],
+              
+              "parameters": [
+                {
+                  "name" :"body",
+                  "in": "body",
+                  "schema": {
+                   "type":"object",
+                   "properties":{
+                    "email": {
+                      "type": "string"
+                    }
+                   }
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Please check your email for reset your password!"
+              
+                },
+                "404": {
+                  "description": "User not exist !"
+                },
+                "500": {
+                  "description": "error"
+                }
+              }
+            }
+          },
+          "/users/requestPasswordReset/{id}/{token}": {
+            
+            "post": {
+              "tags": [
+                "users"
+              ],
+            
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true
+                  
+                },
+                {
+                  "name": "token",
+                  "in": "path",
+                  "required": true
+                  
+                },
+                {
+                  "name" :"body",
+                  "in": "body",
+                  "schema": {
+                   
+                   "type":"object",
+                   "properties":{
+                    "password": {
+                      "type": "string"
+                    }
+                   }
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "password updated"
+              
+                },
+                "404": {
+                  "description": "User not found!"
+                },
+                "500": {
+                  "description": "somthing went wrong!"
+                }
+              }
+            }
+          },
+          "/users/delete/{id}":{
+            "delete": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "users"
+              ],
+             
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "description": "The name that needs to be deleted",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                    
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "user is deleted",
+                  "schema":{
+                    "$ref":"#/definitions/User"
+                  }
+                },
+                "404": {
+                  "description": "User not found"
+                }
+              }
+            }
+          },
+          "/users/deleteAll":{
+            "delete": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "users"
+              ],
+              "responses": {
+                "200": {
+                  "description": "All users are deleted",
+                  "schema":{
+                    "$ref":"#/definitions/User"
+                  }
+                },
+                "400": {
+                  "description": "error deleting users"
+                }
+              }
+            }
+          },
+          "/users": {
+            "get": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "users"
+              ],
+              "responses": {
+                "200": {
+                  "description": "successful operation",
+                  "schema":{
+                    "$ref": "#/definitions/User"
+                  }
+                 
+                }
+              
+              }
+            }
+          },
+          "/users/{id}": {
+            "get": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "users"
+              ],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "successful operation",
+                  "schema":{
+                    "$ref": "#/definitions/User"
+                  }
+                 
+                }
+              
+              }
+            }
+          },
+          "/users/update/{id}":{
+            "parameters": [
+              {
+                "name": "id",
+                "in": "path",
+                "required": true
+              }
+            ],
+            "put": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "users"
+              ],
+              "parameters": [ 
+                { 
+                  "name": "body", 
+                  "in": "body", 
+                  "description": "User with new property values ",
+                  "schema": { 
+                    "properties":{
+                      "firstName": {
+                        "type": "string"
+                      },
+                      "lastName": {
+                        "type": "string"
+                      },
+                      
+                      "email": {
+                        "type": "string"
+                      },
+                      "phone": {
+                        "type": "string"
+                      },
+                      "avatar": {
+                        "type": "string"
+                      },
+                      "role": {
+                        "type": "string"
+                      },
+                      "building": {
+                        "type": "string"
+                      }
+              
+                     }
+                  } 
+                } 
+              ], 
+              "responses": {
+                "200": {
+                  "description": "Successful operation"
+              
+                },
+                "404": {
+                  "description": "not found"
+                }
+               
+              }
+              
+            }
+          },
+          "/disableUser/{id}":{
+            "post": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "users"
+              ],
+              "parameters": [ 
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true
+                  
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "The account is successfully disactivated"
+              
+                },
+                "400": {
+                  "description": "Code is wrong !"
+                },
+                "403": {
+                  "description": "acces denieted !"
+                }
+               
+              }
+              
+            }
+          },
+          "/addDaysOff": {
+            "post": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "daysoffs"
+              ],
+              "parameters": [
+                {
+                  "name" :"body",
+                  "in": "body",
+                  "schema": {
+                   
+                   "type":"object",
+                   "properties":{
+                    "startDay": {
+                      "type": "string",
+                      "example": "2023-01-01"
+                    },
+                    "endDay": {
+                      "type": "string",
+                      "example": "2023-10-01"
+                    },
+                    "type": {
+                      "type": "string",
+                      "example" : "Paid" 
+                    },
+                    "JustificationSick" : {
+                      "type": "string",
+                      "example" : "certificat medical"
+                    }
+                   }
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "your request is succussffully added and the id of it ${newDaysOff._id} "
+              
+                },
+                "201": {
+                  "description": "maximum 2 days "
+              
+                },
+                "400": {
+                  "description": "error adding new Days Off"
+                }
+              }
+            }
+          },
+          "/daysOff": {
+            "get": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "daysoffs"
+              ],
+              "responses": {
+                "200": {
+                  "description": "successful operation",
+                  "content":{
+                    "$ref": "#/definitions/Days"
+                  }
+                 
+                },
+                "404": {
+                  "description": "request not found !"
+                }
+              
+              }
+            }
+          },
+          "/daysOff/{id}": {
+            "get": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "daysoffs"
+              ],
+              "summary": "Logs user into the system",
+              "description": "",
+              "operationId": "loginUser",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true
+                  
+                }
+              ],
+            
+              "responses": {
+                "200": {
+                  "description": "successful operation",
+                  "content":{
+                    "$ref": "#/definitions/Days"
+                  }
+                 
+                },
+                "404": {
+                  "description": "request not found !"
+                }
+              
+              }
+            }
+          },
+          "/updateDaysOff/{id}":{
+            "put": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "daysoffs"
+              ],
+              "parameters": [ 
+                {
+                  "name": "id",
+                  "in": "path",
+                  "description": "The request that needs to updated",
+                  "required": true
+                  
+                },
+                { 
+                  "name": "body", 
+                  "in": "body", 
+                  "description": "Request with new properties",
+                  "schema": { 
+                    "properties":{
+                      "startDay": {
+                        "type": "string",
+                        "example": "2023-01-18"
+                      },
+                      "endDay": {
+                        "type": "string",
+                        "example": "2023-01-22"
+                      },
+                      "type": {
+                        "type": "string"
+                        
+                      }
+              
+                     }
+                  } 
+                } 
+              ], 
+              "responses": {
+                "200": {
+                  "description": "${daysOffs.id} is succussffully updated"
+              
+                },
+                "404": {
+                  "description": "not found"
+                },
+                "500": {
+                  "description": "err"
+                }
+               
+              }
+              
+            }
+          },
+          "/deleteDaysOff/{id}":{
+            "delete": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "daysoffs"
+              ],
+              "summary": "Delete request",
+              "description": "This can only be done by the logged in user.",
+              "operationId": "deleteRequest",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "description": "The request that needs to be deleted",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                    
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "${dayoffDel.id} is succussffully deleted"
+                  
+                },
+                "404": {
+                  "description": "error deleting!"
+                },
+                "400": {
+                  "description": "`you can not remove this request!"
+                }
+              }
+            }
+          },
+          "/deleteAll":{
+            "delete": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "daysoffs"
+              ], 
+              "summary": "Delete all your request",
+              "description": "This can only be done by the logged in user.",
+              "operationId": "deleteAllRequest",
+              "responses": {
+                "200": {
+                  "description": "All request are succussffully deleted"
+                  
+                },
+                "404": {
+                  "description": "Request not found or you are disabled now!"
+                },
+                "401": {
+                  "description": "you can not remove all request!"
+                },
+                "500": {
+                  "description": "error deleting!"
+                }
+              }
+            }
+          },
+          "/daysOff/decision/{id}": {
+            "post": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "daysoffs"
+              ],
+              
+              "summary": "Send decission of request",
+              "description": "Send decission of request",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "description": "The request that needs to answer",
+                  "required": true
+                  
+                },
+                {
+                  "name" :"body",
+                  "in": "body",
+                  "schema": {
+                   "type":"object",
+                   "properties":{
+                    "decisionDirector" : {
+                      "properties":{ 
+                        "userIdDir" : {
+                          "type": "string"
+                        },
+                        "Status": {
+                          "type" : "boolean"
+                        },
+                        "justificationDir" : {
+                          "type" : "string"
+                        }
+                      }
+                    },
+                    "decisionManager" : {
+                      "properties":{ 
+                        "userIdMan" : {
+                          "type": "string"
+                        },
+                        "Status": {
+                          "type" : "boolean"
+                        },
+                        "justificationMan" : {
+                          "type" : "string"
+                        }
+                      }
+                    }
+                   }
+                  }
+                }
+              ],
+              
+              "responses": {
+                "200": {
+                  "description": "user with id = ${userId} ,your answer is succussffully send"
+              
+                },
+                "503": {
+                  "description": "error send answer of this Days Off ${err}"
+                }
+              }
+            }
+          } 
+        },
+      
+        "securityDefinitions": {
+          "Bearer": {
+            "type": "apiKey",
+            "name": "authorization",
+            "in": "header"
+          }
+        },
+        "definitions": {
+          "User": {
+            "required": [
+              "firstName","lastName", "email", "role","building","phone"],
+            "type": "object",
+            "properties": {
+              
+              "firstName": {
+                "type": "string",
+                "example": "exemple"
+              },
+              "lastName": {
+                "type": "string",
+                "example": "exemple"
+              },
+              
+              "email": {
+                "type": "string",
+                "format" : "email",
+                "example": "exemple@email.com"
+              },
+              "password": {
+                "type": "string",
+                "example": "12345"
+              },
+              "phone": {
+                "type": "string",
+                "example": "2345"
+              },
+              "role": {
+                "type": "string",
+                "example": "Software Engineer",
+                "enum": [
+                  "Director",
+                  "Administration Director",
+                  "Administration Assistant",
+                  "Team manager",
+                  "Software Engineer",
+                  "Super Admin"
+                ]
+              },
+              "building": {
+                "type": "string",
+                "example": "Front-End",
+                "enum": [
+                  "Front-End",
+                  "Back-End",
+                  "Full-Stack"
+                ]
+              },
+      
+              "avatar": {
+                "type": "string",
+                "example": "12345"
+              },
+      
+              " isActive": {
+                "type": "boolean",
+                "example": "true"
+              },
+              "soldDays" : {
+                "type" : "Number",
+                "default" : "0"
+              },
+              "allDaysoff" : {
+                "type" : "Number",
+                "default" : "0"
+              },
+              "daysOffSick" : {
+                "type" : "Number",
+                "default" : "0"
+              }
+              
+             
+             
+            },
+            "User": {
+              "type": "object",
+              "$ref": "#/definitions/User"
+            }
+            
+          },
+          "Days": {
+            "required": [
+              "userId",
+              "startDay",
+              "endDay",
+              "type"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64",
+                "example": 10
+              },
+              "userId": {
+                "type": "integer",
+                "example": 100000
+              },
+              "startDay": {
+                "type": "string",
+                "example": "2023-01-18"
+              },
+              "endDay": {
+                "type": "string",
+                "example": "2023-01-22"
+              },
+              "type": {
+                "type": "string",
+                "description": "pet status in the store",
+                "enum": [
+                  "Paid",
+                  "Unpaid",
+                  "Sick"
+                ]
+              },
+              "decisionManager": {
+                "type":"object",
+                "properties":{
+                  "userIdMan":{
+                    "type": "string"},
+                   "status":{
+                    "type": "boolean"},
+                   "justificationMan": {
+                    "type": "string"} 
+                }
+               
+              },
+              "decisionDirector": {
+                "type":"object",
+                "properties":{
+                  "userIdDir":{
+                    "type": "string"},
+                   "status":{
+                    "type": "boolean"},
+                   "justificationDir": {
+                    "type": "string"} 
+                }
+               
+              },
+              "statusReq": {
+                "type": "boolean",
+                "example": "true"
+              },
+              "statusDecision": {
+                "type": "string",
+                "example": "true"
+              },
+              "reqDayOff": {
+                "type": "Number",
+                "example": "0"
+              },
+              "JustificationSick": {
+                "type": "string",
+                "example": "sick"
+              }
+             
+            },
+           
+            "Days": {
+              "type": "object",
+              "$ref": "#/definitions/Days"
+            }
+           
+          }
+         
+        } 
+      
+       
+}
+      
