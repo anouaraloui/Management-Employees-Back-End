@@ -705,7 +705,7 @@
                         "Status": {
                           "type" : "boolean"
                         },
-                        "justificationDir" : {
+                        "JustificationDir" : {
                           "type" : "string"
                         }
                       }
@@ -718,7 +718,7 @@
                         "Status": {
                           "type" : "boolean"
                         },
-                        "justificationMan" : {
+                        "JustificationMan" : {
                           "type" : "string"
                         }
                       }
