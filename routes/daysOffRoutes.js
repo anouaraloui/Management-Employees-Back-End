@@ -7,7 +7,7 @@ import  validorId  from "../middlewares/validatorId.js"
 const router = express.Router();
 
 // Route for added a new request days off
-router.post("/addDaysOff", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next),
+router.post("/daysOff", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next),
 addDaysOff)
 
 // Route for the display all request of days off
@@ -19,7 +19,7 @@ router.get('/daysOff/:id', isAuth,(req, res, next)=> checkRole(['Super Admin','D
 validorId ,getDaysOffById)
 
 // Route for deletion of a well-defined request of days off
-router.delete("/deleteDaysOff/:id", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next),
+router.delete("/delete/:id", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next),
 validorId ,deleteDaysOff)
 
 // Route for delete all request of days off
@@ -27,11 +27,11 @@ router.delete("/deleteAll", isAuth,(req, res, next)=> checkRole(['Super Admin','
 deleteAllDaysOff)
 
 // Updating a request of days off for which the identifier is known
-router.put("/updateDaysOff/:id", isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next),
+router.put("/daysOff/:id", isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next),
 validorId ,updateDaysOff)
 
 // Route for decision of days off
-router.post('/daysOff/decision/:id', isAuth,(req, res, next)=> checkRole(['Director','Team Manager'], req, res, next), 
+router.put('/daysOff/decision/:id', isAuth,(req, res, next)=> checkRole(['Director','Team Manager'], req, res, next), 
 validorId, daysOffDecision, statusReq)
 
 

@@ -137,12 +137,23 @@ export const disableUser = async (req, res, next) => {
 }
 
 
-export const getUsers = async (req, res, next) => {
-    let { page, limit, sortBy, createdAt, createdAtBefore, createdAtAfter } = req.query
-    User.find({}, (err, results) => {
-        err ? res.send(err) : res.send(results)
-    }).select('-password');
-}
+export const getUsers = async (req, res) => {
+    let { page, limit, sortBy,createdAt, createdAtBefore, createdAtAfter } = req.query
+    if(!page) page=1
+    if(!limit) limit=30
+
+    const skip=(page-1)*limit
+   const users= await User.find()
+                          .sort({ [sortBy]: createdAt })
+                          .skip(skip)
+                          .limit(limit)
+                          .where('createdAt').lt(createdAtBefore).gt(createdAtAfter)
+                          .select('-password')
+   
+    const count= await User.count() //estimatedDocumentCount() or countDocuments()
+                        
+    res.send({page:page,limit:limit,totalItems: count, users:users})
+  }
 
 
 export const getUserById = (req, res) => {

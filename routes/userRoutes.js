@@ -3,6 +3,7 @@ import  {addUser, deleteUser, disableUser, forgotPassword, getUserById, getUsers
 import {isAuth} from "../middlewares/auth.js"
 import { checkRole } from "../middlewares/checkRole.js";
 import validorId from "../middlewares/validatorId.js"
+import { validateRequest } from "../middlewares/validatorRequest.js";
 const router = express.Router();
 
 
@@ -13,11 +14,11 @@ router.post('/auth/login', login)
 router.post('/auth/forgetPassword', forgotPassword)
 
 // Route for reset the password
-router.post('/auth/requestResetPassword' , resetPassword )
+router.patch('/auth/requestResetPassword' , resetPassword )
 
 // Route for added a new user
-router.post('/users/Create', isAuth, (req, res, next)=> checkRole(["Super Admin"], req, res, next),
-addUser) 
+router.post('/users', isAuth, (req, res, next)=> checkRole(["Super Admin"], req, res, next),
+validateRequest ,addUser) 
 
 // Disable User
 router.patch( '/users/disable/:id',isAuth,(req, res, next)=> checkRole(['Super Admin'], req, res, next), 

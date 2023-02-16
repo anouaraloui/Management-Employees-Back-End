@@ -105,7 +105,7 @@
           },
           "/auth/requestResetPassword": {
             
-            "post": {
+            "patch": {
               "tags": [
                 "auth"
               ],
@@ -145,7 +145,7 @@
               }
             }
           },
-          "/users/Create": {
+          "/users": {
             "post": {
               "security": [
                 {
@@ -216,6 +216,64 @@
                 }
               }
              
+            },
+            
+            "get": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "page",
+                  "in": "query",
+                  "description": "Page number",
+                  "required": false,
+                  "type": "integer"
+                },
+                {
+                  "name": "limit",
+                  "in": "query",
+                  "description": "Number of items per page",
+                  "required": false,
+                  "type": "integer"
+                },
+                {
+                  "name": "sortBy",
+                  "in": "query",
+                  "description": "Field to sort by",
+                  "required": false,
+                  "type": "string"
+                },
+                {
+                  "name": "createdAtBefore",
+                  "in": "query",
+                  "description": "Filter users created before this date (YYYY-MM-DD format)",
+                  "required": false,
+                  "type": "string"
+                },
+                {
+                  "name": "createdAtAfter",
+                  "in": "query",
+                  "description": "Filter users created after this date (YYYY-MM-DD format)",
+                  "required": false,
+                  "type": "string"
+                }
+              ],
+              "tags": [
+                "users"
+              ],
+              "responses": {
+                "200": {
+                  "description": "successful operation",
+                  "content":[{
+                    "$ref": "#/definitions/User"
+                  }]
+                 
+                }
+              
+              }
             }
           },
           "/users/delete/{id}":{
@@ -251,51 +309,6 @@
                 "404": {
                   "description": "User not found"
                 }
-              }
-            }
-          },
-          "/users/deleteAll":{
-            "delete": {
-              "security": [
-                {
-                  "Bearer": []
-                }
-              ],
-              "tags": [
-                "users"
-              ],
-              "responses": {
-                "200": {
-                  "description": "All users are deleted",
-                  "schema":{
-                    "$ref":"#/definitions/User"
-                  }
-                },
-                "400": {
-                  "description": "error deleting users"
-                }
-              }
-            }
-          },
-          "/users": {
-            "get": {
-              "security": [
-                {
-                  "Bearer": []
-                }
-              ],
-              "tags": [
-                "users"
-              ],
-              "responses": {
-                "200": {
-                  "description": "successful operation",
-                  "content":[{
-                    "$ref": "#/definitions/User"
-                  }]
-                 
-                }
-              
               }
             }
           },
@@ -425,7 +438,7 @@
               
             }
           },
-          "/addDaysOff": {
+          "/daysOff": {
             "post": {
               "security": [
                 {
@@ -476,13 +489,49 @@
                   "description": "error adding new Days Off"
                 }
               }
-            }
-          },
-          "/daysOff": {
+            },
+            
             "get": {
               "security": [
                 {
                   "Bearer": []
+                }
+              ],
+              "parameters": [
+                {
+                  "name": "page",
+                  "in": "query",
+                  "description": "Page number",
+                  "required": false,
+                  "type": "integer"
+                },
+                {
+                  "name": "limit",
+                  "in": "query",
+                  "description": "Number of items per page",
+                  "required": false,
+                  "type": "integer"
+                },
+                {
+                  "name": "sortBy",
+                  "in": "query",
+                  "description": "Field to sort by",
+                  "required": false,
+                  "type": "string"
+                },
+                {
+                  "name": "createdAtBefore",
+                  "in": "query",
+                  "description": "Filter users created before this date (YYYY-MM-DD format)",
+                  "required": false,
+                  "type": "string"
+                },
+                {
+                  "name": "createdAtAfter",
+                  "in": "query",
+                  "description": "Filter users created after this date (YYYY-MM-DD format)",
+                  "required": false,
+                  "type": "string"
                 }
               ],
               "tags": [
@@ -538,9 +587,8 @@
                 }
               
               }
-            }
-          },
-          "/updateDaysOff/{id}":{
+            },
+            
             "put": {
               "security": [
                 {
@@ -597,7 +645,7 @@
               
             }
           },
-          "/deleteDaysOff/{id}":{
+          "/delete/{id}":{
             "delete": {
               "security": [
                 {
@@ -624,20 +672,53 @@
               ],
               "responses": {
                 "200": {
-                  "description": "${dayoffDel.id} is succussffully deleted"
+                  "description": "days off is succussffully deleted"
+                  
+                },
+                "400": {
+                  "description": "you can not remove this request!"
+                },
+                "404": {
+                  "description": "Request not found or you are disabled now!"
+                },
+                "500": {
+                  "description": "error deleting!"
+                }
+              }
+            }
+          },
+          "/deleteAll":{
+            "delete": {
+              "security": [
+                {
+                  "Bearer": []
+                }
+              ],
+              "tags": [
+                "daysoffs"
+              ],
+              "summary": "Delete all request",
+              "description": "This can only be done by the logged in user.",
+              "operationId": "deleteRequest",
+              "responses": {
+                "200": {
+                  "description": " All daysOff are succussffully deleted"
                   
                 },
                 "404": {
-                  "description": "error deleting!"
+                  "description": "Requests not found or you are disabled now!"
                 },
-                "400": {
-                  "description": "`you can not remove this request!"
+                "401": {
+                  "description": "you can not remove all request!"
+                },
+                "500": {
+                  "description": "error deleting!"
                 }
               }
             }
           },
           "/daysOff/decision/{id}": {
-            "post": {
+            "put": {
               "security": [
                 {
                   "Bearer": []

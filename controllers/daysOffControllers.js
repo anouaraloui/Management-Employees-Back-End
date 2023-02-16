@@ -35,14 +35,26 @@ export const addDaysOff = async (req, res) => {
 }
 
 // Display all request
-export const getDaysOff = (req, res, next) => {
+export const getDaysOff = async (req, res, next) => {
+    
     const token = req.headers.authorization.split(' ')[1]; 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN); 
     const userReqId = decodedToken.userId;
     const verifyUser = daysOff.userId = userReqId
-    daysOff.find({ userId : verifyUser }, (err, results) => {
-        err ? res.send(err) : res.send(results)
-    });
+    console.log("verifyUser " , verifyUser);
+    let { page, limit, sortBy,createdAt, createdAtBefore, createdAtAfter } = req.query
+    
+       
+    if(!page) page=1
+    if(!limit) limit=30
+    const skip=(page-1)*limit
+    const daysOffList= await daysOff.find({ userId : verifyUser })
+    .sort({ [sortBy]: createdAt })
+    .skip(skip)
+    .limit(limit)
+    .where('createdAt').lt(createdAtBefore).gt(createdAtAfter)
+    const count= await daysOff.count()
+    res.send({page:page,limit:limit,totalItems: count, daysOff:daysOffList})
 }
 
 // Display one request
@@ -69,7 +81,7 @@ export const deleteDaysOff = async(req,res)=>{
         res.status(200).send({message:`${dayoffDel.id} is succussffully deleted`})
     }
     catch(err){
-        res.json({message:`error deleting!`})
+        res.status(500).json({message:"error deleting!"})
     }
 };
 
@@ -82,18 +94,18 @@ export const deleteAllDaysOff = async(req,res)=>{
         const verifyUser = daysOff.userId = userReqId
         const dayoff = daysOff.find({ userId : verifyUser })
         if(!dayoff){
-            return res.status(404).json({error:`Request not found or you are disabled now! `})
+            return res.status(404).json({error:`Requests not found or you are disabled now! `})
         }
         if(dayoff.statusDecision === true){
-            return res.status(401).json({error:`you can not remove all request!`})
+            return res.status(401).json({error:"you can not remove all request!"})
         }
         else {
             await daysOff.deleteMany(dayoff)
         }
-        return res.status(200).send({message:`All daysOff are succussffully deleted`})
+        return res.status(200).send({message:" All daysOff are succussffully deleted"})
     }
     catch(err){
-        res.status(500).json({message:`error deleting!`})
+        res.status(500).json({message:"error deleting!"})
     }
 };
 
