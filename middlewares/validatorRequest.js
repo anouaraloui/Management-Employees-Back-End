@@ -15,9 +15,9 @@ export const validateRequest = [
         });
       }),
     body('role').notEmpty().withMessage('Role is required'),
-    check('role').isIn([User.role]),
+    check('role').isIn([User.role]).withMessage('Role must be in table'),
     body('building').notEmpty().withMessage('Building is required'),
-    check('building').isIn([User.buiding]).withMessage('Building must be in table'),
+    check('building').isIn([User.building]).withMessage('Building must be in table'),
     body('phone').notEmpty().withMessage('Phone is required').isLength({ min: 12}).withMessage('must be at least 12 chars long'),
 
     (req, res, next) => {
