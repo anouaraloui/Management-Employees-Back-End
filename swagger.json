@@ -12,7 +12,10 @@
           }
         ],
         
-        "tags": [
+        "tags": [{
+          "name": "auth",
+          "description": "Authorization Users"
+        },
           {
             "name": "users",
             "description": "Operations about user"
@@ -24,7 +27,125 @@
         ],
         
         "paths": {
-          "/users/createNewUser": {
+          "/auth/login": {
+            "post": {
+              "tags": [
+                "auth"
+              ],
+              "parameters": [
+                {
+                  "name" :"body",
+                  "in": "body",
+                  "schema": {
+                   "type":"object",
+                   "properties":{
+                    "email": {
+                      "type": "string"
+                    },
+                    "password" : {
+                      "type": "string"
+                    }
+                   }
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Successful operation"
+              
+                },
+                "404": {
+                  "description": "User not found !"
+                },
+                "401": {
+                  "description": "Incorrect password !"
+                },
+                "400": {
+                  "description": "error"
+                },
+                "500": {
+                  "description": "error"
+                }
+              }
+            }
+          },
+          "/auth/forgetPassword": {
+            "post": {
+              "tags": [
+                "auth"
+              ],
+              
+              "parameters": [
+                {
+                  "name" :"body",
+                  "in": "body",
+                  "schema": {
+                   "type":"object",
+                   "properties":{
+                    "email": {
+                      "type": "string"
+                    }
+                   }
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Please check your email for reset your password!"
+              
+                },
+                "404": {
+                  "description": "User not exist !"
+                },
+                "500": {
+                  "description": "error"
+                }
+              }
+            }
+          },
+          "/auth/requestResetPassword": {
+            
+            "post": {
+              "tags": [
+                "auth"
+              ],
+            
+              "parameters": [
+                {
+                  "name" :"body",
+                  "in": "body",
+                  "requestBodies": {
+                    "content": {
+                      "application/json":{
+                        "password": {
+                          "type": "string",
+                          "example": "string"
+                        },
+                        "token": {
+                          "type" : "object",
+                          "example": "string"
+                        }
+                    }
+                    }
+                    
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "password updated"
+              
+                },
+                "404": {
+                  "description": "User not found!"
+                },
+                "500": {
+                  "description": "somthing went wrong!"
+                }
+              }
+            }
+          },
+          "/users/Create": {
             "post": {
               "security": [
                 {
@@ -95,130 +216,6 @@
                 }
               }
              
-            }
-          },
-          "/users/login": {
-            "post": {
-              "tags": [
-                "users"
-              ],
-              "parameters": [
-                {
-                  "name" :"body",
-                  "in": "body",
-                  "schema": {
-                   "type":"object",
-                   "properties":{
-                    "email": {
-                      "type": "string"
-                    },
-                    "password" : {
-                      "type": "string"
-                    }
-                   }
-                  }
-                }
-              ],
-              "responses": {
-                "200": {
-                  "description": "Successful operation"
-              
-                },
-                "404": {
-                  "description": "User not found !"
-                },
-                "401": {
-                  "description": "Incorrect password !"
-                },
-                "400": {
-                  "description": "error"
-                },
-                "500": {
-                  "description": "error"
-                }
-              }
-            }
-          },
-          "/users/forgetPassword": {
-            "post": {
-              "tags": [
-                "users"
-              ],
-              
-              "parameters": [
-                {
-                  "name" :"body",
-                  "in": "body",
-                  "schema": {
-                   "type":"object",
-                   "properties":{
-                    "email": {
-                      "type": "string"
-                    }
-                   }
-                  }
-                }
-              ],
-              "responses": {
-                "200": {
-                  "description": "Please check your email for reset your password!"
-              
-                },
-                "404": {
-                  "description": "User not exist !"
-                },
-                "500": {
-                  "description": "error"
-                }
-              }
-            }
-          },
-          "/users/requestPasswordReset/{id}/{token}": {
-            
-            "post": {
-              "tags": [
-                "users"
-              ],
-            
-              "parameters": [
-                {
-                  "name": "id",
-                  "in": "path",
-                  "required": true
-                  
-                },
-                {
-                  "name": "token",
-                  "in": "path",
-                  "required": true
-                  
-                },
-                {
-                  "name" :"body",
-                  "in": "body",
-                  "schema": {
-                   
-                   "type":"object",
-                   "properties":{
-                    "password": {
-                      "type": "string"
-                    }
-                   }
-                  }
-                }
-              ],
-              "responses": {
-                "200": {
-                  "description": "password updated"
-              
-                },
-                "404": {
-                  "description": "User not found!"
-                },
-                "500": {
-                  "description": "somthing went wrong!"
-                }
-              }
             }
           },
           "/users/delete/{id}":{
@@ -293,16 +290,16 @@
               "responses": {
                 "200": {
                   "description": "successful operation",
-                  "schema":{
+                  "content":[{
                     "$ref": "#/definitions/User"
-                  }
+                  }]
                  
                 }
               
               }
             }
           },
-          "/users/{id}": {
+          "/usersById/{id}": {
             "get": {
               "security": [
                 {
@@ -322,16 +319,15 @@
               "responses": {
                 "200": {
                   "description": "successful operation",
-                  "schema":{
+                  "content":{
                     "$ref": "#/definitions/User"
+
                   }
-                 
                 }
-              
               }
             }
           },
-          "/users/update/{id}":{
+          "/users/{id}":{
             "parameters": [
               {
                 "name": "id",
@@ -395,8 +391,8 @@
               
             }
           },
-          "/disableUser/{id}":{
-            "post": {
+          "/users/disable/{id}":{
+            "patch": {
               "security": [
                 {
                   "Bearer": []
@@ -640,36 +636,6 @@
               }
             }
           },
-          "/deleteAll":{
-            "delete": {
-              "security": [
-                {
-                  "Bearer": []
-                }
-              ],
-              "tags": [
-                "daysoffs"
-              ], 
-              "summary": "Delete all your request",
-              "description": "This can only be done by the logged in user.",
-              "operationId": "deleteAllRequest",
-              "responses": {
-                "200": {
-                  "description": "All request are succussffully deleted"
-                  
-                },
-                "404": {
-                  "description": "Request not found or you are disabled now!"
-                },
-                "401": {
-                  "description": "you can not remove all request!"
-                },
-                "500": {
-                  "description": "error deleting!"
-                }
-              }
-            }
-          },
           "/daysOff/decision/{id}": {
             "post": {
               "security": [
@@ -804,7 +770,7 @@
                 "example": "12345"
               },
       
-              " isActive": {
+              "isActive": {
                 "type": "boolean",
                 "example": "true"
               },
@@ -821,8 +787,6 @@
                 "default" : "0"
               }
               
-             
-             
             },
             "User": {
               "type": "object",

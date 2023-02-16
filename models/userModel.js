@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import validator from 'validator';
 import uniqueValidator from 'mongoose-unique-validator';
 import { config } from "dotenv";
 config()
@@ -10,60 +9,32 @@ let userSchema = new Schema(
     {
         firstName: { 
         type: String,
-        required: true,
-        validate: {
-            validator: function (val) {
-              return validator.isLength(val, { min: 3, max: 25 });
-            }
-        },
-        trim: true, 
-        text: true
+        required: true
         },
         lastName: { 
         type: String,
-        required: true,
-        validate: {
-            validator: function (val) {
-              return validator.isLength(val, { min: 3, max: 25 });
-            }
+        required: true
         },
-        trim: true,
-        text: true
-         },
         email: { 
             type: String,
             required: true,
-            unique: true,
-            trim: true,
-            text: true,
-            lowercase: true,
-            validate: validator.isEmail,
-            validate: {
-                validator: function (val) {
-                  return validator.isLength(val, { min: 3, max: 30 });
-                }
-            },        
+            unique: true        
         },
         password: { 
             type: String,
-            required: true,
-            minlength: 8,
-            validate: validator.isStrongPassword
+            required: true
         },
         role: { 
             type: String, 
             enum:['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'],
             default: 'Software Engineer',
-            required: true,
-            trim: true,
-            text: true
+            required: true
         },
         building: { 
             type: [String], 
             enum:['Front-End','Back-End','Full-Stack'], 
             default: null, 
-            required: true,
-            text: true
+            required: true
         },
         phone: { 
             type: String, 

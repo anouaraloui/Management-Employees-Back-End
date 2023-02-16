@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
-import validator from 'validator';
 
 const Schema = mongoose.Schema;
 
@@ -8,24 +7,21 @@ let daysOffSchema = new Schema(
     {
         userId: {
                 type: mongoose.Schema.Types.ObjectId, 
-                ref:'User', required: true
+                ref:'User', 
+                required: true
             },
         startDay : {
                     type: Date,
-                    required: true,
-                    validate : validator.isDate 
+                    required: true
                 },
         endDay : {
                 type: Date,
-                required: true,
-                validate : validator.isDate
+                required: true
             },
         type: {
                 type: String,
                 enum:["Paid", "Unpaid","Sick"],
-                required: true,
-                trim: true,
-                Text: true
+                required: true
             },
             decisionDirector: {
                 userIdDir: { type: mongoose.Schema.Types.ObjectId, ref:'User'},

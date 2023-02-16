@@ -39,4 +39,20 @@ const sendForgotPassword= (email,userId, token) => {
     })
     .catch((err) => console.log(err));
 }
-export  {  confirmationAccount, sendForgotPassword };
+
+const resetPasswordEmail = (email, password) => {
+    transport.sendMail({
+        from: "managementemployees1@gmail.com",
+        to: email,
+        subject: "Welcome back to our company ",
+        html: `<div>
+        <h1>Welcome back to our company </h1>
+        <h2>Hello<h2>
+        <p>Your password is updated :<p>
+        <p> email: ${email}<p>
+        <p> password: ${password}<p>
+        `
+    }) 
+    .catch((err) => console.log(err));
+}
+export  {  confirmationAccount, sendForgotPassword, resetPasswordEmail };

@@ -1,6 +1,6 @@
 import User  from "../models/userModel.js"
 import bcrypt  from "bcrypt"
-import  { confirmationAccount, sendForgotPassword } from "../middlewares/nodemailer.js";
+import  { confirmationAccount, sendForgotPassword, resetPasswordEmail } from "../middlewares/nodemailer.js";
 import jwt  from "jsonwebtoken"
 import { config } from 'dotenv'
 import dayjs from "dayjs";
@@ -96,24 +96,29 @@ export const forgotPassword =  async ( req, res) => {
 }
 
 export const resetPassword = async (req, res) => {
-    const {id, token} = req.params;
-    const {password} = req.body;
-    const oldUser = await User.findOne({_id: id})
+    const {password, token} = req.body;
+    try {
+    const decodedToken = jwt.decode(token)
+    console.log("decoded " , decodedToken)
+    const userId = decodedToken.id
+    console.log('user is:', userId);
+    const oldUser = await User.findOne({_id: userId})
+    console.log('user id is :',oldUser)
     if(!oldUser) {
         return res.status(404).json({error: 'User not found'})
     }
-    const secret = process.env.ACCESS_TOKEN + oldUser.password
-    try {
-        const verify = jwt.verify(token , secret);
+    
         const encryptedPassword = await bcrypt.hash(password, 10)
         await User.updateOne(
-            {_id: id},
+            {_id: userId},
             {$set : {
                 password: encryptedPassword
                 }
             }
         )
-        res.status(200).json({message: "password updated"})
+         
+        resetPasswordEmail(oldUser.email, password)
+        res.status(200).json({message: "password updated"} )
     } catch (error) {
         res.status(500).json({message: "somthing went wrong!"})
         }
@@ -132,19 +137,20 @@ export const disableUser = async (req, res, next) => {
 }
 
 
-export const getUsers = (req, res, next) => {
-    User.find({}, '-password' , (err, results) => {
+export const getUsers = async (req, res, next) => {
+    let { page, limit, sortBy, createdAt, createdAtBefore, createdAtAfter } = req.query
+    User.find({}, (err, results) => {
         err ? res.send(err) : res.send(results)
-    });
+    }).select('-password');
 }
 
 
 export const getUserById = (req, res) => {
-    User.find({ _id: req.params.id }, '-password' ,(err, result) => {
+    User.find({ _id: req.params.id }, (err, result) => {
         if (!err) {
             res.send(result);
         }
-    });
+    }).select('-password');
 }
 
 export const deleteUser = async (req, res) => {
@@ -158,20 +164,11 @@ export const deleteUser = async (req, res) => {
    
 }
 
-export const deleteAllUsers = async (req, res) => {
-    try {
-        const users = await User.deleteMany( {'role': {$nin:["Super Admin"]}});
-        res.status(200).send({ message: `succussffully deleted exepted the super admin` });
-    }
-    catch (err) {
-        res.status(400).send({ error: `error deleting users ${err}` })
-        }
-}
 
 export const updateUser = async (req, res) => { 
     try{ 
         const token = req.headers.authorization.split(' ')[1]; 
-        const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET'); 
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN); 
         if(decodedToken.role !== "Super Admin"){
         const user= await User.findByIdAndUpdate(req.params.id,{
         firstName : req.body.firstName,

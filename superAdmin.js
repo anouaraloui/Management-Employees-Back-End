@@ -13,7 +13,7 @@ const charactersPass = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123
     }
 const plainPassword = generatePassword;
 
-const query = User.findOne({ 'role' : 'super admin' });
+const query = User.findOne({ 'role' : 'Super Admin' });
 query.select('role')
 query.exec( (err, res, next) => {
     if(err) res.status(500).json({ err })
