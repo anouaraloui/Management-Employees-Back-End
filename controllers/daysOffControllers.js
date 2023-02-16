@@ -42,9 +42,7 @@ export const getDaysOff = async (req, res, next) => {
     const userReqId = decodedToken.userId;
     const verifyUser = daysOff.userId = userReqId
     console.log("verifyUser " , verifyUser);
-    let { page, limit, sortBy,createdAt, createdAtBefore, createdAtAfter } = req.query
-    
-       
+    let { page, limit, sortBy,createdAt, createdAtBefore, createdAtAfter } = req.query   
     if(!page) page=1
     if(!limit) limit=30
     const skip=(page-1)*limit
@@ -144,7 +142,6 @@ export const updateDaysOff = async (req, res) => {
 
 // Decision of request 
 export const daysOffDecision = async (req, res, next) => {
-   
     const { id } = req.params
     const idReq = await daysOff.findOne({_id: id})
     if(!idReq) {
@@ -172,11 +169,10 @@ export const daysOffDecision = async (req, res, next) => {
                     "decisionManager.userIdMan": userId,
                     "decisionManager.Status": req.body.Status,
                     "decisionManager.JustificationMan": req.body.JustificationMan
-                }
-            }    
+                    }
+                }    
             ) 
         }
-        
         await daysOff.findByIdAndUpdate(
             {_id: id},
             {$set : {
@@ -186,7 +182,6 @@ export const daysOffDecision = async (req, res, next) => {
         )
         res.status(200).send({ message: `user with id = ${userId} ,your answer is succussffully send` });
         next()
-    
     }
     catch (err) {
         return res.status(503).json({ error: `error send answer of this Days Off ${err}` })
@@ -209,22 +204,20 @@ export const statusReq = async ( req, res) => {
         await daysOff.findByIdAndUpdate(
             {_id: id}, 
             {$set : {
-                "statusReq" : true,
-
+                "statusReq" : true
             }}
         )
-        if(idReq.JustificationSick != null && user.daysOffSick <= process.env.soldDaysOffSick) {
+        if(idReq.JustificationSick != null && user.daysOffSick < process.env.soldDaysOffSick) {
             await daysOff.findByIdAndUpdate(
                 {_id: id}, 
                 {$set : {
                     "type" : `Sick`
-    
                 }}
             )
             await User.findByIdAndUpdate( 
                 {_id: idUser},
                 {$set : {
-                    "daysOffSick" : oldSoldSick + 2 
+                    "daysOffSick" : oldSoldSick + reqDays 
                     
                     }
                 }
@@ -236,7 +229,6 @@ export const statusReq = async ( req, res) => {
                 {_id: id}, 
                 {$set : {
                     "type" : `Unpaid`
-    
                     }
                 }
             )
@@ -245,7 +237,14 @@ export const statusReq = async ( req, res) => {
         await User.findByIdAndUpdate( 
             {_id: idUser},
             {$set : {
-                "soldeDays" : newSoldDays,
+                "soldeDays" : newSoldDays
+                }
+            }
+        )
+        if(idReq.type != 'Sick')
+        await User.findByIdAndUpdate( 
+            {_id: idUser},
+            {$set : {
                 "allDaysOff": allDaysOff
                 }
             }

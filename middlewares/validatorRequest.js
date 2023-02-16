@@ -1,23 +1,20 @@
-import { body, validationResult, check } from 'express-validator';
-import User from '../models/userModel.js';
+import { body, validationResult } from 'express-validator';
 
-export const validateRequest = [
+export const validateRequestUser = [
     body('firstName').notEmpty().withMessage('First Name is required')
-                    .isLength({ min: 2, max: 10 }).withMessage('First name should be between 2 and 10 characters'),
+                    .isLength({ min: 2, max: 10 })
+                    .isString().trim().escape()
+                    
+                    .withMessage('First name should be between 2 and 10 characters'),
     body('lastName').notEmpty().withMessage('LastName is required')
-    .isLength({ min: 2, max: 10 }).withMessage('Last name should be between 2 and 10 characters'),
+                    .isLength({ min: 2, max: 10 })
+                    .isString().trim().escape().withMessage('Last name should be between 2 and 10 characters'),
     body('email').isEmail().withMessage('Email is not valid').normalizeEmail(),
-    check('email').custom(value => {
-        return User.findByEmail(value).then(user => {
-          if (user) {
-            return Promise.reject('E-mail already in use');
-          }
-        });
-      }),
-    body('role').notEmpty().withMessage('Role is required'),
-    check('role').isIn([User.role]).withMessage('Role must be in table'),
-    body('building').notEmpty().withMessage('Building is required'),
-    check('building').isIn([User.building]).withMessage('Building must be in table'),
+    
+    body('role').notEmpty().isIn(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer']).withMessage('Role is required'),
+
+    body('building').notEmpty().isIn(['Front-End','Back-End','Full-Stack']).withMessage('Building is required'),
+
     body('phone').notEmpty().withMessage('Phone is required').isLength({ min: 12}).withMessage('must be at least 12 chars long'),
 
     (req, res, next) => {
@@ -27,4 +24,21 @@ export const validateRequest = [
       }
       next();
     },
-  ];
+];
+
+export const validateRequestDaysOff = [
+  body('startDay').notEmpty().isDate().withMessage('Satrt day is required '),
+  body('endDay').notEmpty().isDate().withMessage('End day is required '),
+  body('type').notEmpty().isString().isIn(["Paid", "Unpaid","Sick"]).withMessage('Type is required'),
+  body('JustificationSick').isString(),
+  body('Status').isBoolean(),
+  body('JustificationDir').isString(),
+  body('JustificationMan').isString(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];

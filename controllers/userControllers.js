@@ -107,7 +107,6 @@ export const resetPassword = async (req, res) => {
     if(!oldUser) {
         return res.status(404).json({error: 'User not found'})
     }
-    
         const encryptedPassword = await bcrypt.hash(password, 10)
         await User.updateOne(
             {_id: userId},
@@ -116,7 +115,6 @@ export const resetPassword = async (req, res) => {
                 }
             }
         )
-         
         resetPasswordEmail(oldUser.email, password)
         res.status(200).json({message: "password updated"} )
     } catch (error) {

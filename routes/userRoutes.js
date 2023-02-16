@@ -3,7 +3,7 @@ import  {addUser, deleteUser, disableUser, forgotPassword, getUserById, getUsers
 import {isAuth} from "../middlewares/auth.js"
 import { checkRole } from "../middlewares/checkRole.js";
 import validorId from "../middlewares/validatorId.js"
-import { validateRequest } from "../middlewares/validatorRequest.js";
+import { validateRequestUser } from "../middlewares/validatorRequest.js";
 const router = express.Router();
 
 
@@ -18,7 +18,7 @@ router.patch('/auth/requestResetPassword' , resetPassword )
 
 // Route for added a new user
 router.post('/users', isAuth, (req, res, next)=> checkRole(["Super Admin"], req, res, next),
-validateRequest ,addUser) 
+validateRequestUser ,addUser) 
 
 // Disable User
 router.patch( '/users/disable/:id',isAuth,(req, res, next)=> checkRole(['Super Admin'], req, res, next), 
@@ -35,8 +35,6 @@ validorId, getUserById)
 // Route for deletion of a well-defined user
 router.delete('/users/delete/:id',isAuth,(req, res, next)=> checkRole(["Super Admin"], req, res, next),
 validorId, deleteUser)
-
-
 
 // Updating a user for which the identifier is known
 router.put('/users/:id', isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next), 
