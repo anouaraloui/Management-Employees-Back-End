@@ -31,7 +31,17 @@ export const validateRequestDaysOff = [
   body('endDay').notEmpty().isDate().withMessage('End day is required '),
   body('type').notEmpty().isString().isIn(["Paid", "Unpaid","Sick"]).withMessage('Type is required'),
   body('JustificationSick').isString(),
-  body('Status').isBoolean(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
+
+export const validateRequestDecision = [
+  body('Status').isBoolean().notEmpty().withMessage('Should be send your answer about this request !'),
   body('JustificationDir').isString(),
   body('JustificationMan').isString(),
   (req, res, next) => {

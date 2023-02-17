@@ -3,12 +3,13 @@ import { addDaysOff, daysOffDecision, deleteAllDaysOff, deleteDaysOff, getDaysOf
 import { isAuth } from "../middlewares/auth.js"
 import { checkRole } from "../middlewares/checkRole.js";
 import  validorId  from "../middlewares/validatorId.js"
+import { validateRequestDaysOff, validateRequestDecision } from "../middlewares/validatorRequest.js";
 
 const router = express.Router();
 
 // Route for added a new request days off
 router.post("/daysOff", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next),
-addDaysOff)
+validateRequestDaysOff, addDaysOff)
 
 // Route for the display all request of days off
 router.get('/daysOff', isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next),
@@ -32,7 +33,7 @@ validorId ,updateDaysOff)
 
 // Route for decision of days off
 router.put('/daysOff/decision/:id', isAuth,(req, res, next)=> checkRole(['Director','Team Manager'], req, res, next), 
-validorId, daysOffDecision, statusReq)
+validorId, validateRequestDecision, daysOffDecision, statusReq)
 
 
 export default router;
