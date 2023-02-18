@@ -52,7 +52,7 @@ export const getDaysOff = async (req, res, next) => {
     .limit(limit)
     .where('createdAt').lt(createdAtBefore).gt(createdAtAfter)
     const count= await daysOff.count()
-    res.send({page:page,limit:limit,totalItems: count, daysOff:daysOffList})
+    res.send({page:page,limit:limit,totalDaysOff: count, daysOff:daysOffList})
 }
 
 // Display one request

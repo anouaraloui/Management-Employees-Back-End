@@ -150,7 +150,7 @@ export const getUsers = async (req, res) => {
    
     const count= await User.count() //estimatedDocumentCount() or countDocuments()
                         
-    res.send({page:page,limit:limit,totalItems: count, users:users})
+    res.send({page:page,limit:limit,totalUsers: count, users:users})
   }
 
 
