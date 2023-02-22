@@ -266,9 +266,9 @@
               "responses": {
                 "200": {
                   "description": "successful operation",
-                  "content":[{
+                  "content":{
                     "$ref": "#/definitions/User"
-                  }]
+                  }
                  
                 }
               
@@ -539,9 +539,9 @@
               "responses": {
                 "200": {
                   "description": "successful operation",
-                  "content":{
+                  "content":[{
                     "$ref": "#/definitions/Days"
-                  }
+                  }]
                  
                 },
                 "404": {

@@ -141,15 +141,15 @@ export const getUsers = async (req, res) => {
     if(!limit) limit=30
 
     const skip=(page-1)*limit
-   const users= await User.find()
-                          .sort({ [sortBy]: createdAt })
-                          .skip(skip)
-                          .limit(limit)
-                          .where('createdAt').lt(createdAtBefore).gt(createdAtAfter)
-                          .select('-password')
+    const users= await User.find()
+                        .sort({ [sortBy]: createdAt })
+                        .skip(skip)
+                        .limit(limit)
+                        .where('createdAt').lt(createdAtBefore).gt(createdAtAfter)
+                        .select('-password')
    
     const count= await User.count() //estimatedDocumentCount() or countDocuments()
-                        
+    console.log("users", users);
     res.send({page:page,limit:limit,totalUsers: count, users:users})
   }
 
