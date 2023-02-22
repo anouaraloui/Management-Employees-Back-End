@@ -42,8 +42,7 @@ export const validateRequestDaysOff = [
 
 export const validateRequestDecision = [
   body('Status').isBoolean().notEmpty().withMessage('Should be send your answer about this request !'),
-  body('JustificationDir').isString(),
-  body('JustificationMan').isString(),
+  body('JustificationDir') || body('JustificationMan').isString(),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
