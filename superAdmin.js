@@ -1,8 +1,8 @@
-import { connectDB } from "../Back-End/configuration/connectMongodb.js";
-import User from "../Back-End/models/userModel.js";
+import { connectDB } from "./configuration/connectMongodb.js";
+import User from "./models/userModel.js";
 import bcrypt from "bcrypt";
-import { confirmationAccount } from "../Back-End/middlewares/nodemailer.js";
-import data from '../Back-End/superAdmin.json' assert { type: "json" }
+import { confirmationAccount } from "./middlewares/nodemailer.js";
+import data from './superAdmin.json' assert { type: "json" }
 
 connectDB ()
 
@@ -28,6 +28,7 @@ query.exec( (err, res, next) => {
                 user.isActive = true
                 user.save()
                 confirmationAccount(user.email, plainPassword)
+                console.log('Super Admin is created');
             })
             .catch((err) => console.log(err))
         }
