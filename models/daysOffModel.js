@@ -25,13 +25,13 @@ let daysOffSchema = new Schema(
             },
             decisionDirector: {
                 userIdDir: { type: mongoose.Schema.Types.ObjectId, ref:'User'},
-                Status: {type: Boolean, default: null},
-                JustificationDir: {type: String , default: null}
+                status: {type: Boolean, default: null},
+                justification: {type: String , default: null}
                 },
             decisionManager:{
                 userIdMan: {type: mongoose.Schema.Types.ObjectId,ref:'User'}, 
-                Status: {type: Boolean, default: null},
-                JustificationMan: {type: String , default: null}
+                status: {type: Boolean, default: null},
+                justification: {type: String , default: null}
                 },
         statusReq: {
             type: Boolean,
@@ -45,7 +45,7 @@ let daysOffSchema = new Schema(
             type: Number, 
             default: 0
         },
-        JustificationSick : {
+        justificationSick : {
             type: String 
         }
 

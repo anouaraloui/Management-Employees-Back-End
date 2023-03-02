@@ -20,11 +20,11 @@ router.get('/daysOff/:id', isAuth,(req, res, next)=> checkRole(['Super Admin','D
 validorId ,getDaysOffById)
 
 // Route for deletion of a well-defined request of days off
-router.delete("/delete/:id", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
+router.delete("/daysOff/:id", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
 validorId ,deleteDaysOff)
 
 // Route for delete all request of days off
-router.delete("/deleteAll", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
+router.delete("/daysOff", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
 deleteAllDaysOff)
 
 // Updating a request of days off for which the identifier is known
@@ -32,7 +32,7 @@ router.put("/daysOff/:id", isAuth, (req, res, next)=> checkRole(['Super Admin','
 validorId ,updateDaysOff)
 
 // Route for decision of days off
-router.put('/daysOff/decision/:id', isAuth,(req, res, next)=> checkRole(['Director','Team Manager'], req, res, next), 
+router.patch('/daysOff/decision/:id', isAuth,(req, res, next)=> checkRole(['Director','Team Manager'], req, res, next), 
 validorId, validateRequestDecision, daysOffDecision, statusReq)
 
 

@@ -11,7 +11,7 @@ const router = express.Router();
 router.post('/auth/login', login)
 
 // Route for forgot password
-router.post('/auth/forgetPassword', forgotPassword)
+router.post('/auth/forgotPassword', forgotPassword)
 
 // Route for reset the password
 router.patch('/auth/requestResetPassword' , resetPassword )
@@ -21,7 +21,7 @@ router.post('/users', isAuth, (req, res, next)=> checkRole(["Super Admin"], req,
 validateRequestUser ,addUser) 
 
 // Disable User
-router.patch( '/users/disable/:id',isAuth,(req, res, next)=> checkRole(['Super Admin'], req, res, next), 
+router.patch( '/users/toggle-enable/:id',isAuth,(req, res, next)=> checkRole(['Super Admin'], req, res, next), 
 validorId, disableUser );
 
 // Route for the display all users
@@ -29,11 +29,11 @@ router.get('/users', isAuth, (req, res, next)=> checkRole(["Super Admin"], req, 
 getUsers)
 
 // route for displaying the information of a user whose identifier is known
-router.get('/usersById/:id', isAuth, (req, res, next)=> checkRole(["Super Admin"], req, res, next), 
+router.get('/users/:id', isAuth, (req, res, next)=> checkRole(["Super Admin"], req, res, next), 
 validorId, getUserById)                      
 
 // Route for deletion of a well-defined user
-router.delete('/users/delete/:id',isAuth,(req, res, next)=> checkRole(["Super Admin"], req, res, next),
+router.delete('/users/:id',isAuth,(req, res, next)=> checkRole(["Super Admin"], req, res, next),
 validorId, deleteUser)
 
 // Updating a user for which the identifier is known
