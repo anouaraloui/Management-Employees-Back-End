@@ -1,5 +1,5 @@
 import  express  from "express";
-import  {addUser, deleteUser, disableUser, forgotPassword, getUserById, getUsers, login, resetPassword, updateUser}  from "../controllers/userControllers.js"
+import  {addUser, deleteUser, toggleEnableUser, forgotPassword, getUserById, getUsers, login, resetPassword, updateUser}  from "../controllers/userControllers.js"
 import {isAuth} from "../middlewares/auth.js"
 import { checkRole } from "../middlewares/checkRole.js";
 import validorId from "../middlewares/validatorId.js"
@@ -22,7 +22,7 @@ validateRequestUser ,addUser)
 
 // Disable User
 router.patch( '/users/toggle-enable/:id',isAuth,(req, res, next)=> checkRole(['Super Admin'], req, res, next), 
-validorId, disableUser );
+validorId, toggleEnableUser );
 
 // Route for the display all users
 router.get('/users', isAuth, (req, res, next)=> checkRole(["Super Admin"], req, res, next), 

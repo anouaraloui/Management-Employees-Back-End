@@ -123,7 +123,7 @@ export const resetPassword = async (req, res) => {
     }
 }
 
-export const disableUser = async (req, res, next) => {
+export const toggleEnableUser = async (req, res, next) => {
     const { id } = req.params
     User.findOne({ _id: id })
         .then(user => {
