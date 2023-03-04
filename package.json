@@ -1,8 +1,8 @@
 {
   "name": "management-employee",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "The idea is about an app that can manage employees alongside their days off requests.",
+  "main": "server.js",
   "type": "module",
   "pkg": {
     "options": [
@@ -14,7 +14,7 @@
     "start": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Anouar Aloui",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -33,5 +33,13 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anouaraloui/Management-Employees.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anouaraloui/Management-Employees/issues"
+  },
+  "homepage": "https://github.com/anouaraloui/Management-Employees#readme"
 }
