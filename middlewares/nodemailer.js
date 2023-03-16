@@ -33,7 +33,7 @@ const sendForgotPassword= (email,userId, token) => {
         <h1>Password Reset!</h1>
         <h2>Hello<h2>
         <p>To reset your password, please click on the link<p>
-        <a href=http://localhost:8000/reset-password/${userId}/${token}>Click here! </a>
+        <a href=http://localhost:3000/auth/requestResetPassword/${userId}/${token}>Click here! </a>
         </div>
         `
     })

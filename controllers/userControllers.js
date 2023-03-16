@@ -83,7 +83,7 @@ export const forgotPassword = async (req, res) => {
     try {
         const oldUser = await User.findOne({ email })
         if (!oldUser) {
-            return res.status(404).send("User not exist")
+            return res.status(404).json({ error: "User not exist" })
         }
         const secret = process.env.ACCESS_TOKEN + oldUser.password
         const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret,
@@ -96,7 +96,7 @@ export const forgotPassword = async (req, res) => {
 }
 
 export const resetPassword = async (req, res) => {
-    const { password, token } = req.body;
+    const { password, confirmPassword, token } = req.body;
     try {
         const decodedToken = jwt.decode(token)
 
@@ -107,6 +107,7 @@ export const resetPassword = async (req, res) => {
         if (!oldUser) {
             return res.status(404).json({ error: 'User not found' })
         }
+
         const encryptedPassword = await bcrypt.hash(password, 10)
         await User.updateOne(
             { _id: userId },
@@ -116,8 +117,11 @@ export const resetPassword = async (req, res) => {
                 }
             }
         )
+
+
         resetPasswordEmail(oldUser.email, password)
         res.status(200).json({ message: "password updated" })
+
     } catch (error) {
         res.status(500).json({ message: "somthing went wrong!" })
     }
@@ -159,17 +163,17 @@ export const getUserById = (req, res) => {
     User.find({ _id: req.params.id }, (err, result) => {
         if (!err) {
             res.status(201).send(result);
-        }else return res.status(400).json({message : 'Bad requesr'})
+        } else return res.status(400).json({ message: 'Bad requesr' })
     }).select('-password');
 }
 
 export const deleteUser = async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
-        res.status(200).send({ message: `${user.lastName} ${user.firstName} is succussffully deleted` });
+        res.status(200).json({ message: `${user.lastName} ${user.firstName} is succussffully deleted` });
     }
     catch (err) {
-        res.status(404).send({ error: `error deleting user ${err} . Not found !` })
+        res.status(404).json({ error: `error deleting user ${err} . Not found !` })
     }
 
 }
@@ -195,7 +199,7 @@ export const updateUser = async (req, res) => {
         }
     }
     catch (err) {
-        res.status(400).send(err)
+        res.status(400).json(err)
     }
 
 }

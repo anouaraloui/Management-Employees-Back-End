@@ -5,8 +5,10 @@ import  userRoutes  from "./routes/userRoutes.js"
 import dayOffRoutes from "./routes/daysOffRoutes.js"
 import  swaggerUi  from "swagger-ui-express"
 import swaggerDocument from "./swagger.json" assert { type: "json" }
+import cors from 'cors'
 const app = express()
 app.use(json())
+app.use(cors())
 config()
 connectDB()
 

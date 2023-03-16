@@ -23,14 +23,14 @@ export const addDaysOff = async (req, res) => {
         let endDay = dayjs(newDaysOff.endDay)
         let reqDay = endDay.diff(startDay, 'days')
         if (reqDay > process.env.maxDaysByMonth) {
-            return res.status(400).send({ message: "maximum 10 days" })
+            return res.status(400).json({ message: "maximum 10 days" })
         }
         newDaysOff.reqDayOff = reqDay
         await newDaysOff.save();
-        return res.status(200).send({ message: `your request is succussffully added and the id of it ${newDaysOff._id} `, newDaysOff });
+        return res.status(200).json({ message: `your request is succussffully added and the id of it ${newDaysOff._id} `, newDaysOff });
     }
     catch (err) {
-        res.status(401).send({ error: `error adding new Days Off ${err}` })
+        res.status(401).json({ error: `error adding new Days Off ${err}` })
     }
 }
 
@@ -76,7 +76,7 @@ export const deleteDaysOff = async (req, res) => {
             return res.status(400).json({ error: `you can not remove this request!` })
         }
         const dayoffDel = await daysOff.findOneAndDelete({ _id: req.params.id })
-        res.status(200).send({ message: `${dayoffDel.id} is succussffully deleted` })
+        res.status(200).json({ message: `${dayoffDel.id} is succussffully deleted` })
     }
     catch (err) {
         res.status(500).json({ message: "error deleting!" })
@@ -100,7 +100,7 @@ export const deleteAllDaysOff = async (req, res) => {
         else {
             await daysOff.deleteMany(dayoff)
         }
-        return res.status(200).send({ message: " All daysOff are succussffully deleted" })
+        return res.status(200).json({ message: " All daysOff are succussffully deleted" })
     }
     catch (err) {
         res.status(500).json({ message: "error deleting!" })
@@ -110,7 +110,7 @@ export const deleteAllDaysOff = async (req, res) => {
 // Update request
 export const updateDaysOff = async (req, res) => {
     if (!req.body) {
-        return res.status(503).send({ message: `Day off can not update, be empty!` })
+        return res.status(503).json({ message: `Day off can not update, be empty!` })
     }
     const { id } = req.params;
     daysOff.findOne({ _id: id })
@@ -130,11 +130,11 @@ export const updateDaysOff = async (req, res) => {
         let endDay = dayjs(daysOffs.endDay)
         let reqDay = endDay.diff(startDay, 'days')
         if (reqDay > process.env.maxDaysByMonth) {
-            return res.status(201).send({ message: "maximum 10 days" })
+            return res.status(201).json({ message: "maximum 10 days" })
         }
         daysOffs.reqDayOff = reqDay
         await daysOffs.save()
-        res.status(200).send({ message: `${daysOffs.id} is succussffully updated` });
+        res.status(200).json({ message: `${daysOffs.id} is succussffully updated` });
     }
     catch (error) {
         res.status(500).json({ err: `err` });
@@ -185,7 +185,7 @@ export const daysOffDecision = async (req, res, next) => {
                 }
             }
         )
-        res.status(200).send({ message: `user with id = ${userId} ,your answer is succussffully send` });
+        res.status(200).json({ message: `user with id = ${userId} ,your answer is succussffully send` });
         next()
     }
     catch (err) {
