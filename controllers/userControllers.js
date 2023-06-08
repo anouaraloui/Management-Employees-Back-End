@@ -4,7 +4,6 @@ import { confirmationAccount, sendForgotPassword, resetPasswordEmail } from "../
 import jwt from "jsonwebtoken"
 import { config } from 'dotenv'
 import dayjs from "dayjs";
-
 config()
 
 export const addUser = (req, res, next) => {
@@ -14,17 +13,18 @@ export const addUser = (req, res, next) => {
         generatePassword += charactersPass.charAt(Math.floor(Math.random() * charactersPass.length))
     }
     const plainPassword = generatePassword;
+    const {firstName, lastName, email, password, role, building, phone, profile} = req.body
     bcrypt.hash(plainPassword, 10)
         .then(hash => {
             let user = new User({
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                email: req.body.email,
+                firstName,
+                lastName,
+                email,
                 password: hash,
-                role: req.body.role,
-                building: req.body.building,
-                phone: req.body.phone,
-                avatar: req.body.avatar
+                role,
+                building,
+                phone,
+                profile: profile || '',
             })
             user.save()
                 .then(() => {
@@ -96,7 +96,7 @@ export const forgotPassword = async (req, res) => {
 }
 
 export const resetPassword = async (req, res) => {
-    const { password, confirmPassword, token } = req.body;
+    const { password, token } = req.body;
     try {
         const decodedToken = jwt.decode(token)
 
@@ -136,16 +136,17 @@ export const toggleEnableUser = async (req, res, next) => {
             user.save();
             res.status(200).json({ message: 'Successful operation' });
         })
-        .catch(error => res.status(403).json({ error: 'acces denieted !' }));
+        .catch(error => res.status(403).json({ message: 'acces denieted !' }));
 }
 
 
 export const getUsers = async (req, res) => {
-    let { page, limit, sortBy, createdAt, createdAtBefore, createdAtAfter } = req.query
-    if (!page) page = 1
-    if (!limit) limit = 30
 
+    let { page, limit, sortBy, createdAt, createdAtBefore, createdAtAfter } = req.query
+    if (!page) return page = 1
+    if (!limit) return limit = 30
     const skip = (page - 1) * limit
+    
     const users = await User.find()
         .sort({ [sortBy]: createdAt })
         .skip(skip)
@@ -154,16 +155,17 @@ export const getUsers = async (req, res) => {
         .select('-password')
 
     const count = await User.count() //estimatedDocumentCount() or countDocuments()
-    if (users) res.status(201).send({ page: page, limit: limit, totalUsers: count, users: users })
-    else return res.status(404).json({ message: "Users not found !" })
+    if (users) return res.status(201).json({ page: page, limit: limit, totalUsers: count, users: users })
+    else  return res.status(404).json({message : "Users not found !"})
+   
 }
 
 
 export const getUserById = (req, res) => {
     User.find({ _id: req.params.id }, (err, result) => {
         if (!err) {
-            res.status(201).send(result);
-        } else return res.status(400).json({ message: 'Bad requesr' })
+            res.status(201).json(result);
+        } else return res.status(400).json({ message: 'Bad request' })
     }).select('-password');
 }
 
@@ -187,15 +189,17 @@ export const updateUser = async (req, res) => {
             const user = await User.findByIdAndUpdate(req.params.id, {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
-                phone: req.body.phone
+                phone: req.body.phone,
+                profile: req.body.profile || ''
             })
             await user.save();
-            return res.status(200).send(user);
+            return res.status(200).json({ message: 'User Updated ', user });
+            
         }
         else {
             const user = await User.findByIdAndUpdate(req.params.id, req.body)
             await user.save();
-            return res.status(200).send(user);
+            return res.status(200).json({ message: 'User Updated ', user });
         }
     }
     catch (err) {

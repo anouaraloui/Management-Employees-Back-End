@@ -35,11 +35,11 @@ let daysOffSchema = new Schema(
                 },
         statusReq: {
             type: Boolean,
-            default:false
+            default: null
         },
         statusDecision: {
             type: Boolean,
-            default:false
+            default: false
         },
         reqDayOff : { 
             type: Number, 

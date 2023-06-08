@@ -41,13 +41,14 @@ let userSchema = new Schema(
             default: "0000",
             required: true 
         },
-        avatar: { 
-            type: String, 
-            required: false 
+        profile: { 
+            type: String,
+            required: false ,
+            
         },
         isActive: { 
             type: Boolean, 
-            default: true 
+            default: true
         },
         activationCode: String,
         soldeDays : { 

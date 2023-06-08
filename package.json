@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
@@ -26,10 +27,12 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.8.0",
     "mongoose-unique-validator": "^3.1.0",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.8.0",
     "postinstall": "^0.8.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.0"
+    "swagger-ui-express": "^4.6.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

@@ -9,7 +9,7 @@ const router = express.Router();
 
 // Route for added a new request days off
 router.post("/daysOff", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
-validateRequestDaysOff, addDaysOff)
+addDaysOff)
 
 // Route for the display all request of days off
 router.get('/daysOff', isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),

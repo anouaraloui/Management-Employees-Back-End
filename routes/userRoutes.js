@@ -26,11 +26,11 @@ validorId, toggleEnableUser );
 
 // Route for the display all users
 router.get('/users', isAuth, (req, res, next)=> checkRole(["Super Admin"], req, res, next), 
-getUsers)
+ getUsers)
 
 // route for displaying the information of a user whose identifier is known
-router.get('/users/:id', isAuth, (req, res, next)=> checkRole(["Super Admin"], req, res, next), 
-validorId, getUserById)                      
+router.get('/users/:id',  isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next), 
+validorId,getUserById)                      
 
 // Route for deletion of a well-defined user
 router.delete('/users/:id',isAuth,(req, res, next)=> checkRole(["Super Admin"], req, res, next),

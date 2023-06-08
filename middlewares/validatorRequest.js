@@ -17,7 +17,7 @@ export const validateRequestUser = [
     body('building').notEmpty().isIn(['Front-End','Back-End','Full-Stack']).withMessage('Building is required'),
 
     body('phone').notEmpty().withMessage('Phone is required').isLength({ min: 8}).withMessage('must be at least 12 chars long'),
-
+    
     (req, res, next) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
