@@ -3,8 +3,8 @@ import bcrypt from "bcrypt"
 import { confirmationAccount, sendForgotPassword, resetPasswordEmail } from "../middlewares/nodemailer.js";
 import jwt from "jsonwebtoken"
 import { config } from 'dotenv'
-import dayjs from "dayjs";
 config()
+
 
 export const addUser = (req, res, next) => {
     const charactersPass = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -41,21 +41,15 @@ export const login = (req, res, next) => {
         .then(user => {
             if (!user) {
                 return res.status(404).json({ error: 'User not found !' });
-            }
+            };
             if (user.isActive === false) {
                 return res.status(401).json({ error: "You can't login ! You are disabled ! " });
-            }
+            };
             bcrypt.compare(req.body.password, user.password)
                 .then(reslt => {
                     if (!reslt) {
                         return res.status(401).json({ error: 'Incorrect password !' });
-                    }
-                    let debutContrat = user.createdAt
-                    let localDate = dayjs(new Date())
-                    let diifNowDebut = localDate.diff(debutContrat, 'months')
-                    let newSoldDays = 2 * diifNowDebut
-                    user.soldeDays = newSoldDays
-                    user.save()
+                    };
                     res.status(200).json({
                         userId: user._id,
                         token: jwt.sign(
@@ -71,7 +65,7 @@ export const login = (req, res, next) => {
                     if (user.allDaysOff === 24) {
                         console.log("you have finished your leave balance !")
 
-                    }
+                    };
                 })
                 .catch(error => res.status(400).json({ error }));
         })

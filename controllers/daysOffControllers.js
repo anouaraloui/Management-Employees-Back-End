@@ -73,13 +73,14 @@ export const deleteDaysOff = async (req, res) => {
         if (!dayoff) {
             return res.status(404).json({ error: `Request not found or you are disabled now! ` })
         }
+        else if (dayoff.statusDecision && !dayoff.statusReq) return res.status(400).json({ error: `you can not remove this request!` })
         else if (!dayoff.statusDecision || dayoff.statusDecision && dayoff.statusReq != null) {
             await daysOff.findByIdAndDelete({ _id: id })
                 .then(() => {
                     return res.status(200).json({ message: " The Request are succussffully deleted" })
                 })
         }
-        else if (dayoff.statusDecision) return res.status(400).json({ error: `you can not remove this request!` })
+        
     }
     catch (err) {
         res.status(500).json({ err: "error deleting!" })
@@ -135,24 +136,35 @@ export const updateDaysOff = async (req, res) => {
                 return res.status(403).json({ error: `you can't update this request` })
             }
             else try {
-                const daysOffs = await daysOff.findByIdAndUpdate(req.params.id, req.body);
-                let startDay = dayjs(daysOffs.startDay)
-                let endDay = dayjs(daysOffs.endDay)
-                let reqDay = endDay.diff(startDay, 'days')
-                if (reqDay > process.env.maxDaysByMonth) {
-                    return res.status(201).json({ message: "maximum 10 days" })
-                }
-                daysOffs.reqDayOff = reqDay
-                await daysOffs.save()
-                res.status(200).json({ message: `${daysOffs.id} is succussffully updated` });
+                await daysOff.findById(req.params.id)
+                    .then(async (dayoffs) => {
+                        let startDay = dayjs(req.body.startDay)
+                        let endDay = dayjs(req.body.endDay)
+                        let reqDay = endDay.diff(startDay, 'days')
+                        if (reqDay > process.env.maxDaysByMonth) {
+                            return res.status(201).json({ message: "maximum 10 days" })
+                        }
+                        else {
+                            await daysOff.findByIdAndUpdate({
+                                _id: req.params.id
+                            }, {
+                                $set: {
+                                    "startDay": req.body.startDay,
+                                    "endDay": req.body.endDay,
+                                    "justificationSick": req.body.justificationSick,
+                                    "type": req.body.type,
+                                    "reqDayOff": reqDay
+                                },
+                            })
+                            await dayoffs.save()
+                            return res.status(200).json({ message: `${dayoffs.id} is succussffully updated` });
+                        }
+                    })
             }
             catch (error) {
                 return res.status(403).json({ error: `err` });
             }
         });
-
-
-
 }
 
 // Decision of request 

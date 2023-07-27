@@ -1,18 +1,18 @@
 import express, { json } from 'express'
 import { config } from 'dotenv'
 import { connectDB } from "./configuration/connectMongodb.js"
-import  userRoutes  from "./routes/userRoutes.js"
+import userRoutes from "./routes/userRoutes.js"
 import dayOffRoutes from "./routes/daysOffRoutes.js"
-import  swaggerUi  from "swagger-ui-express"
+import swaggerUi from "swagger-ui-express"
 import swaggerDocument from "./swagger.json" assert { type: "json" }
 import cors from 'cors'
-import bodyParser from 'body-parser'
+import User from './models/userModel.js'
+import dayjs from 'dayjs'
+
 const app = express()
 
-// app.use(bodyParser.json({limit: '50mb'}));
-// app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(express.json({limit: '9999999mb'}))
-app.use(express.urlencoded({limit: '9999999mb', extended: true}))
+app.use(express.json({ limit: '9999999mb' }))
+app.use(express.urlencoded({ limit: '9999999mb', extended: true }))
 app.use(json())
 
 app.use(cors())
@@ -23,6 +23,26 @@ app.use('/api-swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use(userRoutes)
 app.use(dayOffRoutes)
 
+const balanceOffDays = async () => {
+  await User.find({}).then(created => created.forEach(async (user) => {
+    let localDate = dayjs(new Date())
+    let diffMonths = localDate.diff(user.createdAt, 'months');
+    console.log('dif Months :', diffMonths);
+    let newSold = diffMonths * 2;
+    console.log('new sold days :', newSold);
+    const id = user._id
+    console.log('id :', id);
+    await User.findByIdAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          "soldeDays": newSold
+        }
+      }
+    )
+  }))
+}
+balanceOffDays()
 
 const port = process.env.PORT || 5000
 app.listen(port, () => console.log(`server is running on: http://localhost:${port}`))
