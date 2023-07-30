@@ -13,7 +13,7 @@ export const addUser = (req, res, next) => {
         generatePassword += charactersPass.charAt(Math.floor(Math.random() * charactersPass.length))
     }
     const plainPassword = generatePassword;
-    const {firstName, lastName, email, password, role, building, phone, profile} = req.body
+    const {firstName, lastName, email,  role, building, phone, profile} = req.body
     bcrypt.hash(plainPassword, 10)
         .then(hash => {
             let user = new User({

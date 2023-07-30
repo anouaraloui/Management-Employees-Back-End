@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import { config } from "dotenv";
 config()
 
-
 // Add new request
 export const addDaysOff = async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
@@ -36,9 +35,6 @@ export const addDaysOff = async (req, res) => {
 
 // Display all request
 export const getDaysOff = async (req, res, next) => {
-
-
-
     let { page, limit, sortBy, createdAt, createdAtBefore, createdAtAfter } = req.query
     if (!page) page = 1
     if (!limit) limit = 30
@@ -126,7 +122,7 @@ export const updateDaysOff = async (req, res) => {
         return res.status(403).json({ message: `Day off can not update, be empty!` })
     }
     const { id } = req.params;
-    daysOff.findOne({ _id: id })
+    await daysOff.findOne({ _id: id })
         .then(async (dayoff) => {
             if (!dayoff) {
                 return res.status(404).json({ error: 'Request not found !' });
@@ -218,14 +214,13 @@ export const daysOffDecision = async (req, res, next) => {
     }
 }
 
-
 //the status of request Accepted or Declined
 export const statusReq = async (req, res) => {
     const { id } = req.params
     const idReq = await daysOff.findOne({ _id: id })
     const idUser = idReq.userId
     let user = await User.findOne({ _id: idUser })
-    let oldSoldDays = user.soldeDays
+    let oldBalanceDays = user.balanceDays
     let statusMan = idReq.decisionManager.status
     let statusDir = idReq.decisionDirector.status
     let reqDays = idReq.reqDayOff
@@ -241,7 +236,7 @@ export const statusReq = async (req, res) => {
         )
         if (idReq.justificationSick != null) {
             const daysSick = oldSoldSick + reqDays
-            if (daysSick <= process.env.soldDaysOffSick) {
+            if (daysSick <= process.env.balanceDaysOffSick) {
                 await User.findByIdAndUpdate(
                     { _id: idUser },
                     {
@@ -273,7 +268,7 @@ export const statusReq = async (req, res) => {
                     { _id: idUser },
                     {
                         $set: {
-                            "allDaysOff": daysSick - process.env.soldDaysOffSick,
+                            "allDaysOff": daysSick - process.env.balanceDaysOffSick,
 
                         }
                     }
@@ -284,7 +279,7 @@ export const statusReq = async (req, res) => {
         }
         let allDaysOff = user.allDaysOff + reqDays
         let diffSick = idReq.type
-        if ((allDaysOff > process.env.soldDaysByYear) && (diffSick != 'Sick')) {
+        if ((allDaysOff > process.env.balanceDaysByYear) && (diffSick != 'Sick')) {
             await daysOff.findByIdAndUpdate(
                 { _id: id },
                 {
@@ -296,12 +291,12 @@ export const statusReq = async (req, res) => {
             )
         }
 
-        let newSoldDays = oldSoldDays - reqDays
+        let newbalanceDays = oldBalanceDays - reqDays
         await User.findByIdAndUpdate(
             { _id: idUser },
             {
                 $set: {
-                    "soldeDays": newSoldDays,
+                    "balanceDays": newbalanceDays,
                     'allDaysOff': allDaysOff
                 }
             }

@@ -36,7 +36,7 @@ const balanceOffDays = async () => {
       { _id: id },
       {
         $set: {
-          "soldeDays": newSold
+          "balanceDays": newSold
         }
       }
     )

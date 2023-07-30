@@ -293,7 +293,7 @@
                           "building": "string",
                           "avatar": "string",
                           "isActive": true,
-                          "soldDays": 0,
+                          "balanceDays": 0,
                           "allDaysoff": 0,
                           "daysOffSick": 0
                         }
@@ -923,7 +923,7 @@
             "type": "boolean",
             "example": "true"
           },
-          "soldDays": {
+          "balanceDays": {
             "type": "Number",
             "default": "0"
           },

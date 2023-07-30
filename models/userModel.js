@@ -51,9 +51,9 @@ let userSchema = new Schema(
             default: true
         },
         activationCode: String,
-        soldeDays : { 
+        balanceDays : { 
             type: Number, 
-            default: process.env.soldeDaysByMonth
+            default: process.env.balanceDaysByMonth
         },
         allDaysOff : { 
             type: Number, 
