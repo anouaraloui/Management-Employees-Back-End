@@ -36,7 +36,7 @@ export const addUser = (req, res, next) => {
         .catch(error => res.status(500).json({ error }))
 }
 
-export const login = (req, res, next) => {
+export const login = (req, res) => {
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user) {
@@ -93,15 +93,11 @@ export const resetPassword = async (req, res) => {
     const { password, token } = req.body;
     try {
         const decodedToken = jwt.decode(token)
-
         const userId = decodedToken.id
-
         const oldUser = await User.findOne({ _id: userId })
-
         if (!oldUser) {
             return res.status(404).json({ error: 'User not found' })
         }
-
         const encryptedPassword = await bcrypt.hash(password, 10)
         await User.updateOne(
             { _id: userId },
@@ -111,11 +107,8 @@ export const resetPassword = async (req, res) => {
                 }
             }
         )
-
-
         resetPasswordEmail(oldUser.email, password)
         res.status(200).json({ message: "password updated" })
-
     } catch (error) {
         res.status(500).json({ message: "somthing went wrong!" })
     }
@@ -135,23 +128,19 @@ export const toggleEnableUser = async (req, res, next) => {
 
 
 export const getUsers = async (req, res) => {
-
     let { page, limit, sortBy, createdAt, createdAtBefore, createdAtAfter } = req.query
     if (!page) return page = 1
     if (!limit) return limit = 30
-    const skip = (page - 1) * limit
-    
+    const skip = (page - 1) * limit    
     const users = await User.find()
         .sort({ [sortBy]: createdAt })
         .skip(skip)
         .limit(limit)
         .where('createdAt').lt(createdAtBefore).gt(createdAtAfter)
         .select('-password')
-
-    const count = await User.count() //estimatedDocumentCount() or countDocuments()
+    const count = await User.count()
     if (users) return res.status(201).json({ page: page, limit: limit, totalUsers: count, users: users })
-    else  return res.status(404).json({message : "Users not found !"})
-   
+    else  return res.status(404).json({message : "Users not found !"})   
 }
 
 
@@ -171,7 +160,6 @@ export const deleteUser = async (req, res) => {
     catch (err) {
         res.status(404).json({ error: `error deleting user ${err} . Not found !` })
     }
-
 }
 
 
@@ -187,8 +175,7 @@ export const updateUser = async (req, res) => {
                 profile: req.body.profile || ''
             })
             await user.save();
-            return res.status(200).json({ message: 'User Updated ', user });
-            
+            return res.status(200).json({ message: 'User Updated ', user });            
         }
         else {
             const user = await User.findByIdAndUpdate(req.params.id, req.body)
@@ -199,5 +186,4 @@ export const updateUser = async (req, res) => {
     catch (err) {
         res.status(400).json(err)
     }
-
 }

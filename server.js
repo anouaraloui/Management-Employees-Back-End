@@ -27,16 +27,13 @@ const balanceOffDays = async () => {
   await User.find({}).then(created => created.forEach(async (user) => {
     let localDate = dayjs(new Date())
     let diffMonths = localDate.diff(user.createdAt, 'months');
-    console.log('dif Months :', diffMonths);
-    let newSold = diffMonths * 2;
-    console.log('new sold days :', newSold);
+    let newBalance = diffMonths * 2;
     const id = user._id
-    console.log('id :', id);
     await User.findByIdAndUpdate(
       { _id: id },
       {
         $set: {
-          "balanceDays": newSold
+          "balanceDays": newBalance
         }
       }
     )

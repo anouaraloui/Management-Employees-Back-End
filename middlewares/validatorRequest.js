@@ -1,11 +1,9 @@
-import { query } from 'express';
 import { body, validationResult } from 'express-validator';
 
 export const validateRequestUser = [
     body('firstName').notEmpty().withMessage('First Name is required')
                     .isLength({ min: 2, max: 10 })
-                    .isString().trim().escape()
-                    
+                    .isString().trim().escape()                    
                     .withMessage('First name should be between 2 and 10 characters'),
     body('lastName').notEmpty().withMessage('LastName is required')
                     .isLength({ min: 2, max: 10 })
