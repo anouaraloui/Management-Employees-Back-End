@@ -28,7 +28,7 @@ router.get('/users', isAuth, (req, res, next)=> checkRole(["Super Admin"], req, 
 getUsers)
 
 // route for displaying the information of a user whose identifier is known
-router.get('/users/:id',  isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next), 
+router.get('/users/:id',  isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'  ], req, res, next), 
 validorId,getUserById)                      
 
 // Route for deletion of a well-defined user
@@ -36,7 +36,7 @@ router.delete('/users/:id',isAuth,(req, res, next)=> checkRole(["Super Admin"], 
 validorId, deleteUser)
 
 // Updating a user for which the identifier is known
-router.put('/users/:id', isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Enginner'], req, res, next), 
+router.put('/users/:id', isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next), 
 validorId,updateUser)
 
 
