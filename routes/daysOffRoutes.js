@@ -1,39 +1,39 @@
 import  express  from "express";
 import { addDaysOff, daysOffDecision, deleteAllDaysOff, deleteDaysOff, getDaysOff, getDaysOffById, statusReq, updateDaysOff } from "../controllers/daysOffControllers.js";
-import { isAuth } from "../middlewares/auth.js"
+import { isAuth } from "../middlewares/auth.js";
 import { checkRole } from "../middlewares/checkRole.js";
-import  validorId  from "../middlewares/validatorId.js"
+import  validorId  from "../middlewares/validatorId.js";
 import { validateRequestDaysOff, validateRequestDecision } from "../middlewares/validatorRequest.js";
 
 const router = express.Router();
 
 // Route for added a new request days off
 router.post("/daysOff", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
-addDaysOff)
+addDaysOff);
 
 // Route for the display all request of days off
 router.get('/daysOff', isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
-getDaysOff)
+getDaysOff);
 
 // route for displaying the information of a request of days off whose identifier is known
 router.get('/daysOff/:id', isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
-validorId ,getDaysOffById)
+validorId ,getDaysOffById);
 
 // Route for deletion of a well-defined request of days off
 router.delete("/daysOff/:id", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
-validorId ,deleteDaysOff)
+validorId ,deleteDaysOff);
 
 // Route for delete all request of days off
 router.delete("/daysOff", isAuth,(req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
-deleteAllDaysOff)
+deleteAllDaysOff);
 
 // Updating a request of days off for which the identifier is known
 router.put("/daysOff/:id", isAuth, (req, res, next)=> checkRole(['Super Admin','Director', 'Administration Director', 'Administration Assistant', 'Team Manager', 'Software Engineer'], req, res, next),
-validorId ,updateDaysOff)
+validorId ,updateDaysOff);
 
 // Route for decision of days off
 router.patch('/daysOff/decision/:id', isAuth,(req, res, next)=> checkRole(['Director','Team Manager'], req, res, next), 
-validorId, validateRequestDecision, daysOffDecision, statusReq)
+validorId, validateRequestDecision, daysOffDecision, statusReq);
 
 
 export default router;

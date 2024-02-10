@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
 import { config } from "dotenv";
-config()
+config();
 
 const Schema = mongoose.Schema;
 
@@ -69,7 +69,7 @@ let userSchema = new Schema(
         timestamps: { currentTime: () => Date.now() },versionKey: false }
 );
 
-userSchema.plugin(uniqueValidator)
+userSchema.plugin(uniqueValidator);
 
 let User = mongoose.model("users", userSchema);
 

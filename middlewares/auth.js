@@ -1,7 +1,7 @@
-import jwt  from "jsonwebtoken"
-import { config } from 'dotenv'
+import jwt  from "jsonwebtoken";
+import { config } from 'dotenv';
 
-config()
+config();
 
 export const isAuth = (req, res, next) => { 
     try { 
@@ -14,4 +14,4 @@ export const isAuth = (req, res, next) => {
     catch { 
         res.status(401).json({ error: ('Invalid request!') }); 
     } 
-}
+};

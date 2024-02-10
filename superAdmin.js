@@ -2,21 +2,21 @@ import { connectDB } from "./configuration/connectMongodb.js";
 import User from "./models/userModel.js";
 import bcrypt from "bcrypt";
 import { confirmationAccount } from "./middlewares/nodemailer.js";
-import data from './superAdmin.json' assert { type: "json" }
+import data from './superAdmin.json' assert { type: "json" };
 
-connectDB ()
+connectDB ();
 
 const charactersPass = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let generatePassword = '';
     for (let i= 0; i < 6; i++) {
         generatePassword += charactersPass.charAt(Math.floor(Math.random() * charactersPass.length))
-    }
+    };
 const plainPassword = generatePassword;
 
 const query = User.findOne({ 'role' : 'Super Admin' });
 query.select('role')
 query.exec( (err, res, next) => {
-    if(err) res.status(500).json({ err })
+    if(err) res.status(500).json({ err });
     else {
         if (res) {
             console.log('Super admin is already exist!');
@@ -33,5 +33,5 @@ query.exec( (err, res, next) => {
             .catch((err) => console.log(err))
         }
     }
-})
+});
 

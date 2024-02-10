@@ -52,7 +52,7 @@ let daysOffSchema = new Schema(
     }, {timestamps: { currentTime: () => Date.now() },versionKey: false }
 );
 
-daysOffSchema.plugin(uniqueValidator)
+daysOffSchema.plugin(uniqueValidator);
 
 let daysOff = mongoose.model("daysOff", daysOffSchema);
 

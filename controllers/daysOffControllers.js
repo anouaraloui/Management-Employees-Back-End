@@ -1,9 +1,9 @@
-import User from "../models/userModel.js"
-import daysOff from "../models/daysOffModel.js"
+import User from "../models/userModel.js";
+import daysOff from "../models/daysOffModel.js";
 import jwt from "jsonwebtoken";
 import dayjs from "dayjs";
 import { config } from "dotenv";
-config()
+config();
 
 // Add new request
 export const addDaysOff = async (req, res) => {
@@ -46,7 +46,7 @@ export const getDaysOff = async (req, res) => {
         .where('createdAt').lt(createdAtBefore).gt(createdAtAfter)
     const count = await daysOff.count();
     res.send({ page: page, limit: limit, totalDaysOff: count, daysOff: daysOffList });
-}
+};
 
 // Display one request
 export const getDaysOffById = (req, res) => {
@@ -59,7 +59,7 @@ export const getDaysOffById = (req, res) => {
             res.status(201).json(result);
         } else return res.status(400).json({ message: 'Bad request' });
     });
-}
+};
 
 // Delete one request
 export const deleteDaysOff = async (req, res) => {
@@ -157,7 +157,7 @@ export const updateDaysOff = async (req, res) => {
                 return res.status(403).json({ error: `err` });
             }
         });
-}
+};
 
 // Decision of request 
 export const daysOffDecision = async (req, res, next) => {
@@ -208,7 +208,7 @@ export const daysOffDecision = async (req, res, next) => {
     catch (err) {
         return res.status(503).json({ error: `error send answer of this Days Off ${err}` });
     }
-}
+};
 
 //the status of request Accepted or Declined
 export const statusReq = async (req, res) => {
@@ -309,4 +309,4 @@ export const statusReq = async (req, res) => {
             }
         )
     }
-}
+};

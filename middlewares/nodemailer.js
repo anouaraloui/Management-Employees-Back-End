@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer";
 
 const transport = nodemailer.createTransport({
     service: "gmail",
@@ -6,7 +6,7 @@ const transport = nodemailer.createTransport({
         user: "managementemployees1@gmail.com",
         pass: "mdbtpmtwhwscwamy"
     }   
-})
+});
 
 const confirmationAccount = (email, plainPassword) => {
     transport.sendMail({
@@ -22,7 +22,7 @@ const confirmationAccount = (email, plainPassword) => {
         `
     }) 
     .catch((err) => console.log(err));
-}
+};
 
 const sendForgotPassword= (email,userId, token) => {
     transport.sendMail({
@@ -38,7 +38,7 @@ const sendForgotPassword= (email,userId, token) => {
         `
     })
     .catch((err) => console.log(err));
-}
+};
 
 const resetPasswordEmail = (email, password) => {
     transport.sendMail({
@@ -54,5 +54,6 @@ const resetPasswordEmail = (email, password) => {
         `
     }) 
     .catch((err) => console.log(err));
-}
+};
+
 export  {  confirmationAccount, sendForgotPassword, resetPasswordEmail };

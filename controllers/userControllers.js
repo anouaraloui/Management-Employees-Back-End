@@ -1,9 +1,9 @@
-import User from "../models/userModel.js"
-import bcrypt from "bcrypt"
+import User from "../models/userModel.js";
+import bcrypt from "bcrypt";
 import { confirmationAccount, sendForgotPassword, resetPasswordEmail } from "../middlewares/nodemailer.js";
-import jwt from "jsonwebtoken"
-import { config } from 'dotenv'
-config()
+import jwt from "jsonwebtoken";
+import { config } from 'dotenv';
+config();
 
 
 export const addUser = (req, res, next) => {
@@ -11,7 +11,7 @@ export const addUser = (req, res, next) => {
     let generatePassword = '';
     for (let i = 0; i < 6; i++) {
         generatePassword += charactersPass.charAt(Math.floor(Math.random() * charactersPass.length))
-    }
+    };
     const plainPassword = generatePassword;
     const {firstName, lastName, email,  role, building, phone, profile} = req.body
     bcrypt.hash(plainPassword, 10)
@@ -34,7 +34,7 @@ export const addUser = (req, res, next) => {
                 .catch(error => res.status(400).json({ error }))
         })
         .catch(error => res.status(500).json({ error }))
-}
+};
 
 export const login = (req, res) => {
     User.findOne({ email: req.body.email })
@@ -70,7 +70,7 @@ export const login = (req, res) => {
                 .catch(error => res.status(400).json({ error }));
         })
         .catch(error => res.status(500).json({ error }));
-}
+};
 
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
@@ -87,7 +87,7 @@ export const forgotPassword = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error });
     }
-}
+};
 
 export const resetPassword = async (req, res) => {
     const { password, token } = req.body;
@@ -112,7 +112,7 @@ export const resetPassword = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "somthing went wrong!" })
     }
-}
+};
 
 export const toggleEnableUser = async (req, res, next) => {
     const { id } = req.params
@@ -124,7 +124,7 @@ export const toggleEnableUser = async (req, res, next) => {
             res.status(200).json({ message: 'Successful operation' });
         })
         .catch(error => res.status(403).json({ message: 'acces denieted !' }));
-}
+};
 
 
 export const getUsers = async (req, res) => {
@@ -141,7 +141,7 @@ export const getUsers = async (req, res) => {
     const count = await User.count()
     if (users) return res.status(201).json({ page: page, limit: limit, totalUsers: count, users: users })
     else  return res.status(404).json({message : "Users not found !"})   
-}
+};
 
 
 export const getUserById = (req, res) => {
@@ -150,7 +150,7 @@ export const getUserById = (req, res) => {
             res.status(201).json(result);
         } else return res.status(400).json({ message: 'Bad request' })
     }).select('-password');
-}
+};
 
 export const deleteUser = async (req, res) => {
     try {
@@ -160,7 +160,7 @@ export const deleteUser = async (req, res) => {
     catch (err) {
         res.status(404).json({ error: `error deleting user ${err} . Not found !` })
     }
-}
+};
 
 
 export const updateUser = async (req, res) => {
@@ -186,4 +186,4 @@ export const updateUser = async (req, res) => {
     catch (err) {
         res.status(400).json(err)
     }
-}
+};
