@@ -50,7 +50,6 @@ let userSchema = new Schema(
             type: Boolean, 
             default: true
         },
-        activationCode: String,
         balanceDays : { 
             type: Number, 
             default: process.env.balanceDaysByMonth

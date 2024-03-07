@@ -108,9 +108,9 @@ export const resetPassword = async (req, res) => {
             }
         )
         resetPasswordEmail(oldUser.email, password)
-        res.status(200).json({ message: "password updated" })
+        res.status(200).json({ message: "Password updated" })
     } catch (error) {
-        res.status(500).json({ message: "somthing went wrong!" })
+        res.status(500).json({ message: "Somthing went wrong!" })
     }
 };
 
