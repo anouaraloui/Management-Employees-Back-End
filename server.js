@@ -1,4 +1,5 @@
 import express, { json } from 'express';
+import "express-async-errors";
 import { config } from 'dotenv';
 import { connectDB } from "./configuration/connectMongodb.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -22,6 +23,11 @@ connectDB();
 app.use('/api-swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(userRoutes);
 app.use(dayOffRoutes);
+
+app.use((error, req, res, next) => {
+  res.status(500).json({ error: error.message });
+  next();
+});
 
 const balanceOffDays = async () => {
   await User.find({}).then(created => created.forEach(async (user) => {
