@@ -262,7 +262,7 @@
         ],
         "responses": {
           "201": {
-            "description": "succussffully updated ",
+            "description": "succussffully operation",
             "content": {
               "application/json": {
                 "schema": {
