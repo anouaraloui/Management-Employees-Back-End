@@ -470,7 +470,7 @@
             "description": "Code is wrong !"
           },
           "403": {
-            "description": "acces denieted !"
+            "description": "Access denied!"
           }
         }
       }
