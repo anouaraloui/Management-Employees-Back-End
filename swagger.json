@@ -262,7 +262,7 @@
         ],
         "responses": {
           "201": {
-            "description": "succussffully operation",
+            "description": "successfully operation",
             "content": {
               "application/json": {
                 "schema": {
@@ -434,7 +434,7 @@
         ],
         "responses": {
           "200": {
-            "description": "firstName lastName is succussffully deleted"
+            "description": "firstName lastName is successfully deleted"
           },
           "404": {
             "description": "User not found"
@@ -586,7 +586,7 @@
         ],
         "responses": {
           "200": {
-            "description": "succussffully updated ",
+            "description": "successfully updated ",
             "content": {
               "application/json": {
                 "schema": {
@@ -653,7 +653,7 @@
         "operationId": "deleteAllRequest",
         "responses": {
           "200": {
-            "description": " All daysOff are succussffully deleted"
+            "description": " All daysOff are successfully deleted"
           },
           "404": {
             "description": "Requests not found or you are disabled now!"
@@ -747,7 +747,7 @@
         },
         "responses": {
           "200": {
-            "description": "succussffully updated ",
+            "description": "successfully updated ",
             "content": {
               "application/json": {
                 "schema": {
@@ -801,7 +801,7 @@
         ],
         "responses": {
           "200": {
-            "description": "days off is succussffully deleted"
+            "description": "days off is successfully deleted"
           },
           "400": {
             "description": "you can not remove this request!"

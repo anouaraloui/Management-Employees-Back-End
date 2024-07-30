@@ -26,7 +26,7 @@ export const addDaysOff = async (req, res) => {
         }
         newDaysOff.reqDayOff = reqDay;
         await newDaysOff.save();
-        return res.status(200).json({ message: 'your request is succussffully added ', newDaysOff });
+        return res.status(200).json({ message: 'your request is successfully added ', newDaysOff });
     }
     catch (err) {
         res.status(401).json({ error: `error adding new Days Off ${err}` });
@@ -73,7 +73,7 @@ export const deleteDaysOff = async (req, res) => {
         else if (!dayoff.statusDecision || dayoff.statusDecision && dayoff.statusReq != null) {
             await daysOff.findByIdAndDelete({ _id: id })
                 .then(() => {
-                    return res.status(200).json({ message: " The Request are succussffully deleted" });
+                    return res.status(200).json({ message: " The Request are successfully deleted" });
                 })
         }        
     }
@@ -98,13 +98,13 @@ export const deleteAllDaysOff = async (req, res) => {
         const decision = true;
         if (!statusDec.includes(decision)) {
             await daysOff.deleteMany({ userId: verifyUser });
-            return res.status(200).json({ message: " All Request are succussffully deleted" });
+            return res.status(200).json({ message: " All Request are successfully deleted" });
         }
         else if (statusDec.includes(decision)) {
             if (statusReq.includes(null)) return res.status(400).json({ message: 'Can not delete all request' });
             else {
                 await daysOff.deleteMany({ userId: verifyUser });
-                return res.status(200).json({ message: " All Request are succussffully deleted" });
+                return res.status(200).json({ message: " All Request are successfully deleted" });
             }
         }
     }
@@ -149,7 +149,7 @@ export const updateDaysOff = async (req, res) => {
                                 },
                             })
                             await dayoffs.save();
-                            return res.status(200).json({ message: `${dayoffs.id} is succussffully updated` });;
+                            return res.status(200).json({ message: `${dayoffs.id} is successfully updated` });;
                         }
                     })
             }
@@ -202,7 +202,7 @@ export const daysOffDecision = async (req, res, next) => {
                 }
             }
         )
-        res.status(200).json({ message: `Your answer is succussffully send` });
+        res.status(200).json({ message: `Your answer is successfully send` });
         return next();
     }
     catch (err) {
